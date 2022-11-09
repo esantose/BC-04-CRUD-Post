@@ -1,0 +1,140 @@
+.App {
+  display: flex;
+  gap: 2rem;
+}
+
+.list__posts {
+  width: 70%;
+}
+
+.list__posts h2 {
+  text-align: center;
+  font-size: 3rem;
+  margin-bottom: 2rem;
+}
+
+.list__posts .list__posts_container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media (min-width: 600px) {
+  .list__posts .list__posts_container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 820px) {
+  .list__posts .list__posts_container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (min-width: 1100px) {
+  .list__posts .list__posts_container {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* Card */
+.list__posts .post__card {
+  background-color: lightblue;
+  color: black;
+  border-radius: 5px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0px 2px 1px rgb(86, 85, 85);
+  position: relative;
+}
+
+.list__posts .post__card .btn-card {
+  position: absolute;
+  top: 0.5rem;
+  border: none;
+  padding: 0.3rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.btn-card.edit {
+  left: 0.5rem;
+  background-color: rgb(247, 194, 50);
+}
+.btn-card.delete {
+  right: 0.5rem;
+  background-color: lightcoral;
+}
+
+.list__posts .post__card h4 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Formulario POSTS */
+.form__posts {
+  width: 28%;
+  background-color: lightblue;
+  border-radius: 10px;
+  box-shadow: 0px 2px 1px rgb(86, 85, 85);
+  padding: 2rem;
+  position: fixed;
+  right: 1rem;
+  top: 5rem;
+}
+
+.form__posts h2 {
+  font-size: 2rem;
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+.form__posts .form__posts__error {
+  color: red;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 700;
+}
+.form__posts .form__posts__success {
+  color: green;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.form__posts .form_field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 1rem;
+}
+
+.form__posts .form_field label {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.form__posts .form_field input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid gray;
+  outline: none;
+}
+
+.form__posts button {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  background-color: rgb(92, 139, 126);
+  color: white;
+  font-size: 16px;
+  text-transform: uppercase;
+  border: none;
+  box-shadow: 0px 2px 1px rgb(86, 85, 85);
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 700;
+  margin-top: 2rem;
+  letter-spacing: 1px;
+}
