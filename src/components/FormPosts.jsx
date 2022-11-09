@@ -1,18 +1,26 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import {
+  Typography,
+  Box,
+  FormControl,
+  Input,
+  InputLabel,
+  Grid,
+  Button,
+} from "@mui/material";
+import { toast } from "react-toastify";
 
-import { createPost, updatePost } from "../api/fetchPosts";
+import { PostContext } from "../context/PostContextProvider";
 
-const FormPosts = (props) => {
-  const { setPosts, singlePost, setSinglePost } = props;
-  const [data, setData] = useState({
-    title: "",
-    author: "",
-  });
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+import { createPostsAction, updatePostAction } from "../reducer/postActions";
+
+const FormPosts = () => {
+  const { postState, dispatch } = useContext(PostContext);
+  const { singlePost } = postState;
+  const [data, setData] = useState({ title: "", author: "" });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { value, name } = e.target;
     setData({
       ...data,
       [name]: value,
@@ -21,45 +29,24 @@ const FormPosts = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (data.title === "" || data.author === "") {
-      setError("Es obligatorio llenar todos los campos");
-
-      setTimeout(() => {
-        setError(null);
-      }, 5000);
+    if ([data.title, data.author].includes("")) {
+      toast.error("Todos los campos son obligatorios");
       return;
     }
 
-    // Enviar
     try {
       if (!singlePost) {
-        /* crear */
         const uid = Date.now() + Math.random().toString(16).slice(10);
-        await createPost({ id: uid, ...data });
-        setPosts((prev) => [...prev, { id: uid, ...data }]);
+        dispatch(await createPostsAction({ id: uid, ...data }));
       } else {
-        /* editar */
-        await updatePost({ id: singlePost.id, ...data });
-        setPosts((prev) =>
-          prev.map((post) => {
-            if (post.id === singlePost.id) {
-              return { id: singlePost.id, ...data };
-            }
-            return post;
-          })
-        );
-        setSinglePost(null);
+        dispatch(await updatePostAction({ id: singlePost.id, ...data }));
       }
+      toast.success(
+        `Post ${singlePost ? "editado" : "creado"} correctamente!!!`
+      );
       setData({ title: "", author: "" });
-      setSuccess(`Post ${singlePost ? "editado" : "creado"} correctamente`);
-      setTimeout(() => {
-        setSuccess(null);
-      }, 3000);
     } catch (error) {
-      setError("Error al crear el post");
-      setTimeout(() => {
-        setError(null);
-      }, 5000);
+      toast.error("Error al crear el post");
     }
   };
 
@@ -73,39 +60,43 @@ const FormPosts = (props) => {
   }, [singlePost]);
 
   return (
-    <form className="form__posts" onSubmit={handleSubmit}>
-      <h2>{singlePost ? "Edita" : "Inserta"} un Post</h2>
-      {/* {error && <p>Error</p>} */}
-      {error ? <p className="form__posts__error">{error}</p> : null}
-      {success ? <p className="form__posts__success">{success}</p> : null}
-      <div className="form_field">
-        <label>Titulo:</label>
-        <input
-          onChange={handleChange}
-          type="text"
-          placeholder="Ejm: Post Titulo"
-          name="title"
-          value={data.title}
-        />
-      </div>
-      <div className="form_field">
-        <label>Author:</label>
-        <input
-          onChange={handleChange}
-          type="text"
-          placeholder="Ejm: José Fernando"
-          name="author"
-          value={data.author}
-        />
-      </div>
-      <button type="submit">{singlePost ? "Editar" : "Insertar"}</button>
-    </form>
+    <Box component="form" onSubmit={handleSubmit}>
+      <Typography
+        variant="h2"
+        sx={{ fontSize: "2.5rem", marginBottom: "1.5rem" }}
+        align="center"
+      >
+        {singlePost ? "Edite" : "Inserte"} un Post
+      </Typography>
+      <Grid
+        container
+        direction="column"
+        sx={{ gap: "1rem", marginBottom: "2rem" }}
+      >
+        <FormControl variant="standard">
+          <InputLabel>Title</InputLabel>
+          <Input
+            onChange={handleChange}
+            placeholder="Ejm: Post 1"
+            value={data.title}
+            name="title"
+          />
+        </FormControl>
+        <FormControl variant="standard">
+          <InputLabel>Author</InputLabel>
+          <Input
+            onChange={handleChange}
+            placeholder="Ejm: José Fernando"
+            value={data.author}
+            name="author"
+          />
+        </FormControl>
+      </Grid>
+      <Button type="submit" variant="contained" fullWidth>
+        {singlePost ? "Editar" : "Insertar"}
+      </Button>
+    </Box>
   );
 };
 
 export default FormPosts;
-
-const arry = [
-  { id: 1, desc: "algo" },
-  { id: 2, desc: "algo2" },
-];

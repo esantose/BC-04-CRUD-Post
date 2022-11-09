@@ -1,33 +1,58 @@
-import { deletePost } from "../api/fetchPosts";
+import { useContext } from "react";
+import { Grid, Paper, Typography } from "@mui/material";
+import { Delete, Edit } from "@mui/icons-material";
+import { toast } from "react-toastify";
 
-const Post = (props) => {
-  const { author, title, id } = props.post;
+import { PostContext } from "../context/PostContextProvider";
+import { deletePostsAction, setSinglePostAction } from "../reducer/postActions";
+
+const Post = ({ post }) => {
+  const { dispatch } = useContext(PostContext);
+  const { title, author, id } = post;
 
   const handleClickDelete = async () => {
     try {
-      await deletePost(id);
-      props.setPosts((prev) => prev.filter((post) => post.id !== id));
-      // props.deletePostById(id);
+      dispatch(await deletePostsAction(id));
+      toast.success("Post eliminado correctamente!!!");
     } catch (error) {
-      console.log(error);
+      toast.error("Error al eliminar el post");
     }
   };
 
   const handleClickEdit = () => {
-    props.setSinglePost({ ...props.post });
+    dispatch(setSinglePostAction(post));
   };
 
   return (
-    <article className="post__card">
-      <button onClick={handleClickEdit} className="btn-card edit">
-        Edit
-      </button>
-      <button onClick={handleClickDelete} className="btn-card delete">
-        Delete
-      </button>
-      <h4>{title}</h4>
-      <p>{author}</p>
-    </article>
+    <Paper
+      elevation={1}
+      sx={{
+        padding: "1rem 0",
+        backgroundColor: "lightblue",
+        position: "relative",
+      }}
+    >
+      <Grid
+        container
+        sx={{
+          justifyContent: "space-between",
+          position: "absolute",
+          padding: "0 1rem",
+          top: "1rem",
+        }}
+      >
+        <Delete onClick={handleClickDelete} className="icon icon-delete" />
+        <Edit onClick={handleClickEdit} className="icon icon-edit" />
+      </Grid>
+      <Typography
+        variant="h4"
+        align="center"
+        sx={{ fontSize: "1.3rem", marginBottom: "1rem" }}
+      >
+        {title}
+      </Typography>
+      <Typography align="center">{author}</Typography>
+    </Paper>
   );
 };
 

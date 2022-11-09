@@ -1,10 +1,21 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
-import './index.css'
+// import { createTheme, ThemeProvider } from "@mui/material";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { ToastContainer } from "react-toastify";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-)
+import "react-toastify/dist/ReactToastify.css";
+
+import App from "./App";
+import PostContextProvider from "./context/PostContextProvider";
+import "./index.css";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <>
+    {/* <ThemeProvider theme={theme}> */}
+    <PostContextProvider>
+      <App />
+      <ToastContainer />
+    </PostContextProvider>
+    {/* </ThemeProvider> */}
+  </>
+);

@@ -1,27 +1,22 @@
-import { useState } from "react";
+// import Button from '@mui/material/Button';
+import { Container, Grid } from "@mui/material";
 
 import "./App.css";
-
 import FormPosts from "./components/FormPosts";
-import ListaPosts from "./components/ListaPosts";
+import ListPosts from "./components/ListPosts";
 
 function App() {
-  const [posts, setPosts] = useState([]);
-  const [singlePost, setSinglePost] = useState(null);
-
   return (
-    <div className="App">
-      <ListaPosts
-        posts={posts}
-        setPosts={setPosts}
-        setSinglePost={setSinglePost}
-      />
-      <FormPosts
-        setPosts={setPosts}
-        singlePost={singlePost}
-        setSinglePost={setSinglePost}
-      />
-    </div>
+    <Container maxWidth={false} sx={{ paddingTop: "1rem" }}>
+      <Grid container spacing={3}>
+        <Grid item xs={8}>
+          <ListPosts />
+        </Grid>
+        <Grid item xs={4}>
+          <FormPosts />
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
 
